@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Question extends Model
 {
     use HasFactory;
+    protected $fillable = ['question','questionable_id','questionable_type'];
+
+    public function questionalble()
+    {
+        return $this->morphTo();
+    }
 }
