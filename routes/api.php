@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::controller(PracticalController::class)->prefix('practical')->group(function(){
     Route::get('list/{id}','list')->name('list');
     Route::post('create','create')->name('create');
+    Route::post('add-question','addQuestion')->name('add-question');
     Route::post('update','update')->name('update');
     Route::post('delete/{id}','delete')->name('delete');
     Route::get('show/{id}','show')->name('show');
@@ -34,6 +35,7 @@ Route::controller(PracticalController::class)->prefix('practical')->group(functi
 Route::controller(TheoryController::class)->prefix('theory')->group(function(){
     Route::get('list/{id}','list')->name('list');
     Route::post('create','create')->name('create');
+    Route::post('add-question','addQuestion')->name('add-question');
     Route::post('update','update')->name('update');
     Route::post('delete/{id}','delete')->name('delete');
     Route::get('show/{id}','show')->name('show');

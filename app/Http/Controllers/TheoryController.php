@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Theory;
 use App\Http\Trait\ResponseTrait;
 use App\Models\Question;
+use Illuminate\Support\Facades\Redis;
+use Psy\Output\Theme;
 
 class TheoryController extends Controller
 {
@@ -23,15 +25,34 @@ class TheoryController extends Controller
     public function create(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'subject_name'   => 'required|max:40|string'
+            'subject_name'   => 'required|max:40|string',
+            //'question'       => 'required'
         ]);
 
         if ($validation->fails())
             return $this->validationErrorsResponse($validation);
 
         $theory = Theory::create($request->only(['subject_name']));
-            
+
+        //$theory->question()->create(['question'=>$request->question]);
+ 
         return $this->returnResponse(true, 'Theory Subject Inserted Successfully', $theory);
+    }
+
+    public function addQuestion(Request $request)
+    {
+        $validation = Validator::make($request->all(),[
+            'subject_name'  => 'required|exists:theories,subject_name',
+            'question'      => 'required'
+        ]);
+
+        if ($validation->fails())
+            return $this->validationErrorsResponse($validation);
+
+        $theory = Theory::where('subject_name',$request->subject_name)->first();
+        $theory->question()->create(['question'=>$request->question]);
+        return $this->returnResponse(true, 'Theory Question Inserted Successfully');
+        
     }
 
     public function update(Request $request)
