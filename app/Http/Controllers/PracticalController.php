@@ -33,6 +33,23 @@ class PracticalController extends Controller
         return $this->returnResponse(true, 'Practical Subject Inserted Successfully', $practical);
     }
 
+    public function addQuestion(Request $request)
+    {
+        $validation = Validator::make($request->all(),[
+            'subject_name'  => 'required|exists:practicals,subject_name',
+            'question'      => 'required'
+        ]);
+
+        if ($validation->fails())
+            return $this->validationErrorsResponse($validation);
+
+        $practical = Practical::where('subject_name',$request->subject_name)->first();
+        $practical->question()->create(['question'=>$request->question]);
+
+        return $this->returnResponse(true, 'Practical Question Inserted Successfully');
+
+    }
+
     public function update(Request $request)
     {
         $validation = Validator::make($request->all(), [
